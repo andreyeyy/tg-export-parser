@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "Simple library for parsing a Telegram export file (result.json)"
 license = "MIT"
+readme = "README.md"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

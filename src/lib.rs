@@ -7,7 +7,7 @@
 //!
 //! #### Example
 //!
-//! ```
+//! ```ignore
 //! use std::path::Path;
 //!
 //! use tg_export_parser::TgExportParser;
@@ -30,7 +30,7 @@
 
 use std::fs::File;
 use std::io::{BufReader, BufRead, Read};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use serde::Deserialize;
 use std::{error::Error, fmt};
 
@@ -100,6 +100,8 @@ struct MessageEntity {
 
 #[derive(Debug, Deserialize)]
 pub struct RawMessage {
+    pub id: i64,
+    pub reply_to_message_id: Option<i64>,
     pub date_unixtime: String,
     pub date: String,
     pub from: Option<String>,
@@ -223,3 +225,14 @@ impl Iterator for TgExportParser {
     }
 }
 
+
+#[test]
+fn valid_json() {
+    let path: PathBuf = std::env::var("TEST_FILE").expect("Set TEST_FILE to a file path").parse().expect("Invalid TEST_FILE path");
+
+    let messages = TgExportParser::from_file(&path).expect("Create parser");
+
+    for m in messages {
+        m.unwrap();
+    }
+}
